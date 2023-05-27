@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 
 @Component({
@@ -6,5 +7,25 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'Frontend-Prodaja-kruha';
+
+  baseUrl: string = "https://localhost:5001/api/"
+
+  title = 'Prodaja kruha';
+  products: any;
+
+  constructor(private http: HttpClient){}
+
+  ngOnInit()
+  {
+      this.http.get(this.baseUrl + "products").subscribe(
+        {
+          next: response => this.products = response,
+          error: error => console.log(error),
+          complete: () => {}
+        })
+  }
+
+ 
+  
+  
 }

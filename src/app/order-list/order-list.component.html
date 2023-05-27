@@ -1,0 +1,20 @@
+<div class="container">
+  <accordion [isAnimated]="true">
+    <accordion-group *ngFor="let order of orders" class="accordion-group"
+                     [ngClass]="{'green-background': order.completed == true}">
+      <div class="accordion-heading" accordion-heading>
+        <div class="customer-name">Kupac: {{ order.customerName }}</div>
+        <div class="product-details">
+          Product Types:
+          <ng-container *ngFor="let item of order.orderItems; let last = last">
+            {{ item.productType }}/ {{ item.quantity }}{{ !last ? ',' : '' }}
+          </ng-container>
+        </div>
+        <div class="target-day">Day: {{ order.targetDay }}</div>
+      </div>
+      <div class="accordion-content">
+        This content is straight in the template.
+      </div>
+    </accordion-group>
+  </accordion>
+</div>
