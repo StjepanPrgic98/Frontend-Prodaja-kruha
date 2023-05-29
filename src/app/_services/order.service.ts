@@ -13,4 +13,14 @@ export class OrderService {
   public GetOrders(): Observable<any> {
     return this.http.get(this.baseUrl + "orders");
   }
+
+  public GetTotalAmmountOfOrders(): Observable<any>
+  {
+    return this.http.get(this.baseUrl + "orders/totalAmmount");
+  }
+
+  public DeleteOrder(id: number): Observable<any>
+  {
+      return this.http.delete(this.baseUrl + "orders/delete/" + id);   
+  }
 }

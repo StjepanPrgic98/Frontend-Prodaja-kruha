@@ -11,6 +11,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AccordionModule } from 'ngx-bootstrap/accordion';
 import { OrderListComponent } from './order-list/order-list.component';
+import { TotalAmmountComponent } from './total-ammount/total-ammount.component';
+import { OrdersPageComponent } from './orders-page/orders-page.component';
 
 
 
@@ -18,7 +20,9 @@ import { OrderListComponent } from './order-list/order-list.component';
   declarations: [
     AppComponent,
     NavComponent,
-    OrderListComponent
+    OrderListComponent,
+    TotalAmmountComponent,
+    OrdersPageComponent,
   ],
   imports: [
     BrowserAnimationsModule,

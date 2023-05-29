@@ -11,6 +11,7 @@ export class OrderListComponent {
 
   orders: any;
 
+
   constructor(private orderService: OrderService){}
 
   ngOnInit() {
@@ -23,5 +24,16 @@ export class OrderListComponent {
       }
     );
   }
+
+  DeleteOrder(id: number)
+  {
+    this.orderService.DeleteOrder(id);
+    console.log(id);
+  }
+
+
+
+
+ 
 
 }

@@ -13,6 +13,12 @@
   justify-content: space-between;
   align-items: center;
 }
+.descript
+{
+  font-size: 30px;
+  font-weight: bold;
+}
+
 
 .customer-name {
   flex: 1;
@@ -27,5 +33,69 @@
 }
 
 .green-background {
-  background-color: rgba(50, 205, 50, 0.3);
+  background-color: rgba(0, 255, 0, 0.278);
+}
+.accordion-group {
+  margin-bottom: 5px;
+}
+.container {
+  margin-top: 100px;
+}
+
+.accordion {
+  font-size: 14px;
+  padding: 5px;
+}
+
+
+.accordion-content {
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+.order-details-heading,
+.order-items-heading {
+  font-weight: bold;
+}
+
+.order-details,
+.order-items {
+  margin-top: 10px;
+}
+
+table {
+  width: 100%;
+  margin-top: 10px;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 5px;
+  border: 1px solid #ccc;
+}
+
+.green-text {
+  color: green;
+}
+
+.accordion-heading {
+  padding: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  text-decoration: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.target-day {
+  flex-shrink: 0; /* Prevents the "Day" label from shrinking */
+}
+
+.total-price {
+  text-align: right; /* Align the "Total Price" label to the right */
+  flex-shrink: 0; /* Prevents the "Total Price" label from shrinking */
 }
