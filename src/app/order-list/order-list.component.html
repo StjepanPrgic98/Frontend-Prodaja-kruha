@@ -1,23 +1,49 @@
 <div class="container">
-  <div class="row" style="margin-left: 10px;">
+  <div class="row">
+    <div class="col-md-12" *ngIf="newOrder && !deletedOrder">    
+        <alert class="alertText" [type]="orderAddedAlert.type" [dismissOnTimeout]="orderAddedAlert.timeout" (onClosed)="onClosed(orderAddedAlert)">{{ orderAddedAlert.msg }}</alert>
+    </div>
+    <div class="col-md-12" *ngIf="deletedOrder && !newOrder">    
+      <alert class="alertText" [type]="orderDeletedAlert.type" [dismissOnTimeout]="orderDeletedAlert.timeout" (onClosed)="onClosed(orderDeletedAlert)">{{ orderDeletedAlert.msg }}</alert>
+    </div>
+    <div class="col-md-12" *ngIf="completedOrder">    
+      <alert class="alertText" [type]="orderCompletedAlert.type" [dismissOnTimeout]="orderCompletedAlert.timeout" (onClosed)="onClosed(orderCompletedAlert)">{{ orderCompletedAlert.msg }}</alert>
+    </div>
+    
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+          <button type="button" class="btn btn-outline-warning btn-lg btn-block custom-button" routerLink="/orders/create">Nova narudzba</button>
+        </div>
+        <div class="col-md-2"></div>
+        <div class="col-md-1 d-flex justify-content-end">
+          <div class="targetDayWrapper">
+            <button (click)="SetTargetDay('Tuesday')" type="button" class="btn btn-outline-warning btn-lg btn-block targetDayButton" [ngClass]="{'active': targetDayChosen === 'Tuesday'}">UTORAK</button>
+          </div>
+          <div class="targetDayWrapper ml-2">
+            <button (click)="SetTargetDay('Friday')" type="button" class="btn btn-outline-warning btn-lg btn-block targetDayButton" [ngClass]="{'active': targetDayChosen=== 'Friday'}">PETAK</button>
+          </div>
+        </div>
+        <div class="col-md-12 dayTitle">Prikazuju se narudube za <strong>{{croatianDay}}</strong>!</div>
+  </div>
+  <div class="row" style="margin-left: 50px;">
     <div class="col-md-4 descript">Ime kupca</div>
     <div class="col-md-4 descript">Kruh / Količina</div>
-    <div class="col-md-2 descript"></div>
+    <div class="col-md-1 descript"></div>
     <div class="col-md-2 descript">Cijena</div>
   </div>
   <accordion [isAnimated]="true">
-    <accordion-group *ngFor="let order of orders" class="accordion-group customMargin">
+    <accordion-group *ngFor="let order of orders" class="accordion-group customMargin" [ngClass]="{'green-background': order.completed == true}">
       <div class="accordion-heading" accordion-heading [ngClass]="{'green-background': order.completed == true}">
         <div class="customer-name">{{ order.customerName }}</div>
         <div class="product-details">
           <ng-container *ngFor="let item of order.orderItems; let last = last">
-            {{ item.productType }} / {{ item.quantity }}{{ !last ? ' | ' : '' }}
+            {{ item.productType }} / {{ item.quantity }} <strong style="color: #ffbf01; text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;">{{ !last ? ' | ' : '' }}</strong>
           </ng-container>
         </div>
         <div class="total-price" *ngIf="order.totalPrice !== undefined">
           <span style="margin-right: 70px;">${{ order.totalPrice }}</span>
-          <button class="btn btn-success">
-            <i class="fa fa-check-square-o"></i>
+          <button *ngIf="!order.completed" class="btn btn-outline-success" (click)="CompleteOrder(order.orderId)">
+            <i class="fa fa-check-square"></i>
           </button>
         </div>
       </div>
@@ -41,9 +67,9 @@
           </table>
         </div>
         
-        <div class="row" style="margin-top: 7px;">
+        <div class="row" style="margin-top: 7px;" *ngIf="!order.completed">
           <div class="col-md-7"><button type="button" class="btn btn-warning">Promjeni stavke narudzbe</button></div>
-          <div class="col-md-5"><button type="button" class="btn btn-danger" (click)="DeleteOrder(order.orderId)">Obrisi narudzbu!</button></div>
+          <div class="col-md-5"><button type="button" class="btn btn-danger" (click)="DeleteOrder(order.orderId)" (click)="CalculateOrders()">Obrisi narudzbu!</button></div>
         </div>
       </div>
     </accordion-group>

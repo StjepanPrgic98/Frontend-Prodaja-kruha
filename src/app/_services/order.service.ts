@@ -13,6 +13,10 @@ export class OrderService {
   public GetOrders(): Observable<any> {
     return this.http.get(this.baseUrl + "orders");
   }
+  public GetOrdersForTargetDay(targetDay: string): Observable<any>
+  {
+    return this.http.get(this.baseUrl + "orders/targetDay/" + targetDay)
+  }
 
   public GetTotalAmmountOfOrders(): Observable<any>
   {
@@ -23,4 +27,9 @@ export class OrderService {
   {
       return this.http.delete(this.baseUrl + "orders/delete/" + id);   
   }
+  public CompleteOrder(id: number): Observable<any>
+  {
+    return this.http.patch(this.baseUrl + "orders/complete/" + id, {});
+  }
+  
 }

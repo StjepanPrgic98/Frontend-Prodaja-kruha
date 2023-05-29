@@ -13,6 +13,10 @@ import { AccordionModule } from 'ngx-bootstrap/accordion';
 import { OrderListComponent } from './order-list/order-list.component';
 import { TotalAmmountComponent } from './total-ammount/total-ammount.component';
 import { OrdersPageComponent } from './orders-page/orders-page.component';
+import { ProgressbarModule } from 'ngx-bootstrap/progressbar';
+import { AlertModule } from 'ngx-bootstrap/alert';
+import { StatsComponent } from './stats/stats.component';
+import { OrderCreateComponent } from './order-create/order-create.component';
 
 
 
@@ -23,6 +27,8 @@ import { OrdersPageComponent } from './orders-page/orders-page.component';
     OrderListComponent,
     TotalAmmountComponent,
     OrdersPageComponent,
+    StatsComponent,
+    OrderCreateComponent,
   ],
   imports: [
     BrowserAnimationsModule,
@@ -30,7 +36,9 @@ import { OrdersPageComponent } from './orders-page/orders-page.component';
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    AccordionModule.forRoot()
+    AccordionModule.forRoot(),
+    ProgressbarModule.forRoot(),
+    AlertModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]
