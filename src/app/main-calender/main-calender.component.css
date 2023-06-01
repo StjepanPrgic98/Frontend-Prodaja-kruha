@@ -1,0 +1,19 @@
+.custom-datepicker {
+    font-size: 24px;
+    width: 100%;
+    height: 100%;
+  }
+
+
+  
+  .custom-datepicker .bs-datepicker-body {
+    font-size: 24px;
+  }
+  /* custom-datepicker.css */
+
+:host /deep/ .bs-datepicker-container {
+    transform: scale(3,2); /* Adjust the scale value as needed */
+    transform-origin: top center;
+    background-color: rgb(255, 255, 255);
+  }
+  

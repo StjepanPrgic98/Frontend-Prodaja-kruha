@@ -13,19 +13,6 @@ export class AppComponent {
   title = 'Prodaja kruha';
   products: any;
 
-  constructor(private http: HttpClient){}
-
-  ngOnInit()
-  {
-      this.http.get(this.baseUrl + "products").subscribe(
-        {
-          next: response => this.products = response,
-          error: error => console.log(error),
-          complete: () => {}
-        })
-  }
-
- 
-  
+  constructor(private http: HttpClient){} 
   
 }

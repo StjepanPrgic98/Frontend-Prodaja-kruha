@@ -17,6 +17,9 @@ import { ProgressbarModule } from 'ngx-bootstrap/progressbar';
 import { AlertModule } from 'ngx-bootstrap/alert';
 import { StatsComponent } from './stats/stats.component';
 import { OrderCreateComponent } from './order-create/order-create.component';
+import { OrderUpdateComponent } from './order-update/order-update.component';
+import { MainCalenderComponent } from './main-calender/main-calender.component';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
 
 
@@ -29,6 +32,8 @@ import { OrderCreateComponent } from './order-create/order-create.component';
     OrdersPageComponent,
     StatsComponent,
     OrderCreateComponent,
+    OrderUpdateComponent,
+    MainCalenderComponent,
   ],
   imports: [
     BrowserAnimationsModule,
@@ -38,7 +43,8 @@ import { OrderCreateComponent } from './order-create/order-create.component';
     FormsModule,
     AccordionModule.forRoot(),
     ProgressbarModule.forRoot(),
-    AlertModule.forRoot()
+    AlertModule.forRoot(),
+    BsDatepickerModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -3,6 +3,9 @@ import { OrderService } from '../_services/order.service';
 import { TotalAmmountComponent } from '../total-ammount/total-ammount.component';
 import { AlertComponent } from 'ngx-bootstrap/alert';
 import { timeout } from 'rxjs';
+import { SharedService } from '../_services/shared.service';
+import { Order } from '../_models/order';
+import { Route, Router } from '@angular/router';
 
 @Component({
   selector: 'app-order-list',
@@ -20,14 +23,19 @@ export class OrderListComponent {
   deletedOrder: boolean = false;
   updatedOrder: boolean = false;
   completedOrder: boolean = false;
+  dateOfOrders: string = "";
+  orderDay: string = "";
 
 
-  constructor(private orderService: OrderService) {}
+  constructor(private orderService: OrderService, private sharedService: SharedService, private router: Router) {}
 
   ngOnInit() {
+    this.dateOfOrders = this.orderService.GetOrderDate()
+    this.orderDay = this.orderService.GetOrderDay();
+    this.newOrder = this.orderService.CheckForNewOrder();
     this.targetDayChosen = this.defaultDay;
-    this.GetOrders(this.defaultDay);
-    this.SetCroatianDay();
+    this.GetOrdersForTargetDate();
+    this.orderService.RemoveNewOrder();
   }
 
   SetCroatianDay()
@@ -45,6 +53,15 @@ export class OrderListComponent {
         console.log(error);
       }
     );
+  }
+  GetOrdersForTargetDate()
+  {
+    if(this.orderService.GetOrderDate() == ""){this.router.navigateByUrl("/")}
+    this.orderService.GetOrdersForTargetDate(this.orderService.GetOrderDate()).subscribe(
+      {
+        next: response => {this.orders = response, this.dateOfOrders = this.orderService.GetOrderDate()},
+        error: error => console.log(error)
+      })
   }
 
   SetTargetDay(targetDay: string)
@@ -64,7 +81,7 @@ export class OrderListComponent {
   DeleteOrder(id: number) {
     this.orderService.DeleteOrder(id).subscribe({
       next: () => {
-        this.GetOrders(this.targetDayChosen);
+        this.GetOrdersForTargetDate();
         
       },
       error: error => console.log(error)
@@ -76,11 +93,17 @@ export class OrderListComponent {
   {
     this.orderService.CompleteOrder(id).subscribe(
       {
-        next: () => this.GetOrders(this.targetDayChosen),
+        next: () => this.GetOrdersForTargetDate(),
         error: error => console.log(error)
       });
     this.completedOrder = true;
     this.ScrollToTop();
+  }
+  
+  UpdateOrder(id: number)
+  {
+    this.sharedService.SetOrderId(id);
+    this.router.navigateByUrl("/orders/update/" + id);
   }
 
   CalculateOrders()

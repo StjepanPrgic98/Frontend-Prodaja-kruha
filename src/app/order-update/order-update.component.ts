@@ -1,18 +1,22 @@
 import { Component } from '@angular/core';
-import { ProductService } from '../_services/product.service';
+import { Router } from '@angular/router';
+import { AlertComponent } from 'ngx-bootstrap/alert';
 import { OrderItem } from '../_models/OrderItem';
 import { Order } from '../_models/order';
-import { Product } from '../_models/Product';
-import { AlertComponent } from 'ngx-bootstrap/alert';
 import { OrderService } from '../_services/order.service';
-import { Router } from '@angular/router';
+import { ProductService } from '../_services/product.service';
+import { SharedService } from '../_services/shared.service';
 
 @Component({
-  selector: 'app-order-create',
-  templateUrl: './order-create.component.html',
-  styleUrls: ['./order-create.component.css']
+  selector: 'app-order-update',
+  templateUrl: './order-update.component.html',
+  styleUrls: ['./order-update.component.css']
 })
-export class OrderCreateComponent {
+export class OrderUpdateComponent {
+
+  orderToUpdate: any;
+
+
 
   customerName: string = "";
   numberOfOrderedProduct: number[] = [0,0,0,0,0,0];
@@ -30,20 +34,58 @@ export class OrderCreateComponent {
   abortOrder: boolean = false;
 
   timesAdded: number = 0;
+  dontReduce: boolean = false;
 
   
 
-  constructor(private productService: ProductService, private orderService: OrderService, private router: Router){}
-
+  constructor(private productService: ProductService, private orderService: OrderService, private router: Router, private sharedService: SharedService){}
   ngOnInit()
   {
-    this.GetProducts();
-    this.SetCroatianDay()
+    this.GetProducts(); 
+    this.SetCroatianDay();
   }
 
-  CreateOrder()
+  GetOrder()
   {
-    console.log("Current date chosen: " + this.orderService.GetOrderDate())
+    this.orderService.GetOrderById(this.sharedService.GetOrderId()).subscribe(
+      {
+        next: response => 
+        {
+          this.orderToUpdate = response;
+          this.customerName = this.orderToUpdate.customerName,
+          this.targetDayChosen = this.orderToUpdate.targetDay,
+          this.FillArrays()
+        },
+        error: error => console.log(error)
+      })
+  }
+
+  FillArrays()
+  {   
+    for (let i = 0; i < this.products.length; i++)
+    {
+      this.productTypes[i+1] = this.products[i].type;
+    }
+    for (let i = 0; i < this.orderToUpdate.orderItems.length; i++)
+    {
+      for (let j = 0; j < this.productTypes.length+1; j++)
+      {
+        if(this.productTypes[j] == this.orderToUpdate.orderItems[i].productType)
+        {
+          this.numberOfOrderedProduct[j] = this.orderToUpdate.orderItems[i].quantity
+          this.timesAdded += this.orderToUpdate.orderItems[i].quantity
+          console.log(this.productTypes);
+          console.log(this.numberOfOrderedProduct);
+        }
+      }
+      
+      
+    }
+    
+  }
+
+  UpdateOrder(id: number)
+  {
     this.CheckIfOrderIsCorrect();
     if(this.abortOrder){return;}
     this.SortArrays(); 
@@ -65,12 +107,12 @@ export class OrderCreateComponent {
       TargetDate: this.orderService.GetOrderDate()
     }
     this.order = newOrder;
-    this.PostRequest(this.order)
+    this.PutRequest(this.order, id)
   }
 
-  PostRequest(order: Order)
+  PutRequest(order: Order, id: number)
   {
-    this.orderService.CreateOrder(order).subscribe(
+    this.orderService.UpdateOrder(order, id).subscribe(
       {
         next: () => this.router.navigateByUrl("/orders"),
         error: error => console.log(error)
@@ -81,7 +123,7 @@ export class OrderCreateComponent {
   {
     this.productService.GetProducts().subscribe(
       {
-        next: response => this.products = response,
+        next: response => {this.products = response, this.GetOrder()},
         error: error => console.log(error)
       })
   }
@@ -99,6 +141,7 @@ export class OrderCreateComponent {
       
     }
     this.timesAdded++;
+    console.log(this.timesAdded);
   
   }
   DecreaseNumber(id: number, type: string)
@@ -107,11 +150,17 @@ export class OrderCreateComponent {
     {
       if(i == id)
       {
-        this.numberOfOrderedProduct[i]--;
-        this.productTypes[i] = type;
+        if(this.numberOfOrderedProduct[i] <= 0){this.numberOfOrderedProduct[i] = 0;}
+        else
+        {
+          this.numberOfOrderedProduct[i]--;
+          this.productTypes[i] = type;
+        }
       }
     }
     this.timesAdded--;
+    console.log(this.timesAdded);
+    
   }
 
   SetTargetDay(targetDay: string)
@@ -141,6 +190,7 @@ export class OrderCreateComponent {
     if(this.targetDayChosen == null || this.targetDayChosen == undefined || this.targetDayChosen == ""){this.isTargetDayNull = true; this.abortOrder = true; this.ScrollToTop()}
     if(this.timesAdded <= 0){this.areProductItemsNull = true, this.abortOrder = true; this.ScrollToTop()}
   }
+
   SetCroatianDay()
   {
     console.log(this.orderService.GetOrderDay())
@@ -221,3 +271,5 @@ export class OrderCreateComponent {
   
 
 }
+
+

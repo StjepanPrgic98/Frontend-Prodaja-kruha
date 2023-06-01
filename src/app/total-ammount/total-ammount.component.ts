@@ -35,13 +35,9 @@ export class TotalAmmountComponent {
   }
 
   CalculateFullTotal() {
-      console.log("Before: " +this.totalQuantity);
-      console.log("Before: " + this.totalPrice);
     for (let order of this.totalOrders) {
       this.totalQuantity += order.totalQuantity;
       this.totalPrice += order.totalPrice;
-      console.log(this.totalQuantity);
-      console.log(this.totalPrice);
     }
     
   }
