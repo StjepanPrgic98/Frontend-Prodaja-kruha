@@ -6,6 +6,10 @@ import { StatsComponent } from './stats/stats.component';
 import { OrderCreateComponent } from './order-create/order-create.component';
 import { OrderUpdateComponent } from './order-update/order-update.component';
 import { MainCalenderComponent } from './main-calender/main-calender.component';
+import { TotalAmmountComponent } from './total-ammount/total-ammount.component';
+import { OrderPropertyComponent } from './order-property/order-property.component';
+import { IngredientsPageComponent } from './ingredients-page/ingredients-page.component';
+import { IngredientsUsedComponent } from './ingredients-used/ingredients-used.component';
 
 const routes: Routes = 
 [
@@ -13,6 +17,10 @@ const routes: Routes =
   {path: "orders", component: OrderListComponent},
   {path: "orders/create", component: OrderCreateComponent},
   {path: "orders/update/:id", component: OrderUpdateComponent},
+  {path: "orders/info", component: TotalAmmountComponent},
+  {path: "orders/property", component: OrderPropertyComponent},
+  {path: "ingredients/list", component: IngredientsPageComponent},
+  {path: "ingredients/ingredientsUsed", component: IngredientsUsedComponent},
   {path: "stats", component: StatsComponent},
   {path: "**", component: OrdersPageComponent, pathMatch: "full"},
 ];

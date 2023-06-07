@@ -6,6 +6,10 @@ import { Product } from '../_models/Product';
 import { AlertComponent } from 'ngx-bootstrap/alert';
 import { OrderService } from '../_services/order.service';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { SharedService } from '../_services/shared.service';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-order-create',
@@ -33,10 +37,14 @@ export class OrderCreateComponent {
 
   
 
-  constructor(private productService: ProductService, private orderService: OrderService, private router: Router){}
+  constructor(private productService: ProductService,
+     private orderService: OrderService, private router: Router, 
+     private toastr: ToastrService, private sharedService: SharedService,
+     private sanitizer: DomSanitizer){}
 
   ngOnInit()
   {
+    if(this.orderService.GetOrderDate() == ""){this.router.navigateByUrl("/"); return;}
     this.GetProducts();
     this.SetCroatianDay()
   }
@@ -72,16 +80,17 @@ export class OrderCreateComponent {
   {
     this.orderService.CreateOrder(order).subscribe(
       {
-        next: () => this.router.navigateByUrl("/orders"),
-        error: error => console.log(error)
+        next: () => {this.router.navigateByUrl("/orders")},
+        error: error => this.toastr.error("Narudzba nije spremljena!", "Upozorenje!")
       })
   }
 
   GetProducts()
   {
+    if(this.sharedService.GetProducts() != null){this.products = this.sharedService.GetProducts(); return;}
     this.productService.GetProducts().subscribe(
       {
-        next: response => this.products = response,
+        next: response => {this.products = response, this.sharedService.SetProducts(response)},
         error: error => console.log(error)
       })
   }
@@ -137,9 +146,9 @@ export class OrderCreateComponent {
   CheckIfOrderIsCorrect()
   {
     this.ResetAlerts();
-    if(this.customerName == null || this.customerName == undefined || this.customerName == ""){this.isCustomerNameNull = true; this.abortOrder = true; this.ScrollToTop()}
+    if(this.customerName == null || this.customerName == undefined || this.customerName == ""){ this.abortOrder = true; this.toastr.error("Ime kupca nije uneseno!", "Upozorenje!", {positionClass: "toast-top-center"})}
     if(this.targetDayChosen == null || this.targetDayChosen == undefined || this.targetDayChosen == ""){this.isTargetDayNull = true; this.abortOrder = true; this.ScrollToTop()}
-    if(this.timesAdded <= 0){this.areProductItemsNull = true, this.abortOrder = true; this.ScrollToTop()}
+    if(this.timesAdded <= 0){this.abortOrder = true, this.toastr.error("Proizvodi nisu uneseni!", "Upozorenje", {positionClass: "toast-top-center"})}
   }
   SetCroatianDay()
   {
@@ -190,6 +199,13 @@ export class OrderCreateComponent {
     msg: `Upozorenje! Dan nije izabran`,
     timeout: 5000
   }
+
+  getFullImageUrl(relativePath: string): SafeUrl {
+    const baseUrl = "https://localhost:5001/api/"
+    const imageUrl = `${baseUrl}/${relativePath}`;
+    return this.sanitizer.bypassSecurityTrustUrl(imageUrl);
+  }
+  
 
   
  

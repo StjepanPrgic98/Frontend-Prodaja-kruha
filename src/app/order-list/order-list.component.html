@@ -1,20 +1,28 @@
+
 <div class="container">
   <div class="row">
-    <div class="col-md-12" *ngIf="newOrder && !deletedOrder">    
-        <alert class="alertText" [type]="orderAddedAlert.type" [dismissOnTimeout]="orderAddedAlert.timeout" (onClosed)="onClosed(orderAddedAlert)">{{ orderAddedAlert.msg }}</alert>
+    
+    <div class="col-md-3 d-flex justify-content-start">
+      <div class="targetDayWrapper">
+        <button type="button" class="btn btn-outline-danger btn-lg btn-block targetDayButton-red" (click)="GetListOfRegularOrdersWithOption()" style="font-weight: bold;">Dodaj redovne narudžbe <i class="fa fa-calendar-check-o"></i></button>
+      </div>
     </div>
-    <div class="col-md-12" *ngIf="deletedOrder && !newOrder">    
-      <alert class="alertText" [type]="orderDeletedAlert.type" [dismissOnTimeout]="orderDeletedAlert.timeout" (onClosed)="onClosed(orderDeletedAlert)">{{ orderDeletedAlert.msg }}</alert>
-    </div>
-    <div class="col-md-12" *ngIf="completedOrder">    
-      <alert class="alertText" [type]="orderCompletedAlert.type" [dismissOnTimeout]="orderCompletedAlert.timeout" (onClosed)="onClosed(orderCompletedAlert)">{{ orderCompletedAlert.msg }}</alert>
+    <div class="col-md-6">
+      <button type="button" class="btn btn-outline-warning btn-lg btn-block custom-button-order" routerLink="/orders/create">Nova narudžba <i class="fa fa-arrow-circle-o-down"></i></button>
     </div>
     
-        <div class="col-md-3"></div>
-        <div class="col-md-6">
-          <button type="button" class="btn btn-outline-warning btn-lg btn-block custom-button" routerLink="/orders/create">Nova narudzba</button>
-        </div>
-        <div class="col-md-2"></div>
+    <div class="col-md-2"></div>
+    <div class="col-md-1 d-flex justify-content-end">
+      <div class="targetDayWrapper">
+        <button type="button" class="btn btn-outline-warning btn-lg targetDayButton" routerLink="/orders/info" style="font-weight: bold;">
+          <div class="d-flex align-items-center">
+            <span class="mr-2">Informacije </span>
+            <i class="fa fa-bar-chart" style="margin-left: 5px;"></i>
+          </div>
+        </button>
+      </div>
+    </div>
+    
         
         <div class="col-md-12 dayTitle">Prikazuju se narudzbe za <strong>{{orderDay}} - {{dateOfOrders}}</strong>!</div>
   </div>
@@ -25,7 +33,12 @@
     <div class="col-md-2 descript">Cijena</div>
   </div>
   <accordion [isAnimated]="true">
-    <accordion-group *ngFor="let order of orders" class="accordion-group customMargin" [ngClass]="{'green-background': order.completed == true}">
+    <accordion-group *ngFor="let order of orders" class="accordion-group customMargin" [ngClass]="{
+      'green-background': order.completed && !(order.property === 'Regular' || order.property === 'TuesdayRegular' || order.property === 'FridayRegular') && !order.notSold,
+      'red-background': !order.completed && (order.property === 'Regular' || order.property === 'TuesdayRegular' || order.property === 'FridayRegular') && !order.notSold,
+      'gray-background': order.notSold,
+      'gradient-border': order.completed && (order.property === 'Regular' || order.property === 'TuesdayRegular' || order.property === 'FridayRegular') && !order.notSold
+    }">
       <div class="accordion-heading" accordion-heading [ngClass]="{'green-background': order.completed == true}">
         <div class="customer-name">{{ order.customerName }}</div>
         <div class="product-details">
@@ -35,36 +48,97 @@
         </div>
         <div class="total-price" *ngIf="order.totalPrice !== undefined">
           <span style="margin-right: 70px;">${{ order.totalPrice }}</span>
-          <button *ngIf="!order.completed" class="btn btn-outline-success" (click)="CompleteOrder(order.orderId)">
-            <i class="fa fa-check-square"></i>
+          <span style="margin-right: 70px;" *ngIf="order.notSold">Nije prodano!</span>
+          <span style="margin-right: 70px;" *ngIf="order.completed">Prodano!</span>
+          <button *ngIf="!order.completed && !order.notSold" class="btn btn-outline-success" (click)="CompleteOrder($event,order.orderId)">
+            <i class="fa fa-check-square fa-2x"></i>
           </button>
         </div>
       </div>
       <div class="accordion-content" [ngClass]="{'green-text': order.completed}">
-        <h4 class="order-details-heading">Order Details</h4>
-        <div class="order-details">
-          <p><strong>Customer:</strong> {{ order.customerName }}</p>
-        </div>
-
-        <h4 class="order-items-heading">Order Items</h4>
-        <div class="order-items">
-          <table>
-            <tr>
-              <th>Product Type</th>
-              <th>Quantity</th>
-            </tr>
-            <tr *ngFor="let item of order.orderItems">
-              <td>{{ item.productType }}</td>
-              <td>{{ item.quantity }}</td>
-            </tr>
-          </table>
-        </div>
+        <ng-template #template>
+          <div class="modal-body text-center">
+            <p class="modal-text">Obrisati narudzbu?</p>
+            <button type="button" class="btn btn-danger modal-button"  (click)="confirm(); DeleteOrder(order.orderId)" >Da</button>
+            <button type="button" class="btn btn-primary modal-button" (click)="decline()" >Ne</button>
+          </div>
+        </ng-template>
         
-        <div class="row" style="margin-top: 7px;" *ngIf="!order.completed">
-          <div class="col-md-7"><button type="button" class="btn btn-warning" (click)="UpdateOrder(order.orderId)">Promjeni stavke narudzbe</button></div>
-          <div class="col-md-5"><button type="button" class="btn btn-danger" (click)="DeleteOrder(order.orderId)" (click)="CalculateOrders()">Obrisi narudzbu!</button></div>
+    
+        <div class="row" style="margin-top: 7px;" *ngIf="order.property == 'Normal' && !order.notSold">
+          <div class="col-md-6 d-flex justify-content-start">
+            <div class="btn-group">
+              <button type="button" class="btn btn-warning custom-button" (click)="lgModal.show()">
+                <i class="fa fa-check"></i> Postavi kao redovnu
+              </button>
+              <button type="button" class="btn btn-dark custom-button regular-button" (click)="UpdateOrder(order.orderId)">
+                <i class="fa fa-history"></i> Promjeni stavke narudzbe
+              </button>
+            </div>
+          </div>
+          <div class="col-md-6 d-flex justify-content-end">
+            <div class="btn-group">
+              <button type="button" class="btn btn-dark custom-button regular-button" (click)="MarkAsNotSold(order.orderId)">
+                <i class="fa fa-exclamation-triangle"></i> Označi kao ne prodano
+              </button>
+              <button type="button" class="btn btn-danger custom-button delete-button" (click)="openModal(template); CalculateOrders()">
+                <i class="fa fa-minus-square"></i> Obriši narudžbu
+              </button>
+            </div>
+          </div>
+        </div>    
+        <div class="row" style="margin-top: 7px;" *ngIf="order.property != 'Normal'">
+          <div class="col-md-12 dayTitle-regular">Ovo je redovna narudžba, i može se promjenuti samo iz liste redovnih narudžbi</div>
+          <div class="col-md-12 d-flex justify-content-center">
+            <div class="btn-group">
+              <button type="button" class="btn btn-dark custom-button regular-button" (click)="MarkAsNotSold(order.orderId)" style="margin-top: 10px;" *ngIf="!order.notSold">
+                <i class="fa fa-exclamation-triangle"></i> Označi kao ne prodano
+              </button>
+            </div>
+          </div>
+        </div>    
+      
+        
+        
+        
+      </div>
+      <div bsModal #lgModal="bs-modal" class="modal fade" tabindex="-1"
+     role="dialog" aria-labelledby="dialog-sizes-name1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 id="dialog-sizes-name1" class="modal-title day-title-modal">Izaberite dane za koji ce narudzba biti redovna</h4>
+        <button type="button" class="btn-close close pull-right" (click)="lgModal.hide()" aria-label="Close">
+          <span aria-hidden="true" class="visually-hidden">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="col-md-12 text-center"><strong>Izaberite jednu od ponudjenih opcija</strong></div>
+        <div class="row" style="margin-top: 7px;">
+          
+          <div class="col-md-4 d-flex justify-content-center">
+            <button type="button" class="btn btn-dark custom-button regular-button" (click)="SetOrderProperty(order?.orderId, 'TuesdayRegular'); lgModal.hide()">
+              <i class="fa fa-history"></i> Utorak
+            </button>
+          </div>
+          <div class="col-md-4 d-flex justify-content-center">
+            <button type="button" class="btn btn-dark custom-button regular-button" (click)="SetOrderProperty(order?.orderId, 'FridayRegular'); lgModal.hide()">
+              <i class="fa fa-history"></i> Petak
+            </button>
+          </div>
+          <div class="col-md-4 d-flex justify-content-center">
+            <button type="button" class="btn btn-dark custom-button regular-button" (click)="SetOrderProperty(order?.orderId, 'Regular'); lgModal.hide()">
+              <i class="fa fa-history"></i> Utorak i Petak
+            </button>
+          </div>
+          
         </div>
       </div>
+    </div>
+  </div>
+</div>
+      
     </accordion-group>
+    
   </accordion>
 </div>

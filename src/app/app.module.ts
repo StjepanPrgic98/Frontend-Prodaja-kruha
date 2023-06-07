@@ -20,6 +20,13 @@ import { OrderCreateComponent } from './order-create/order-create.component';
 import { OrderUpdateComponent } from './order-update/order-update.component';
 import { MainCalenderComponent } from './main-calender/main-calender.component';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { ToastrModule } from 'ngx-toastr';
+import { OrdersNavComponent } from './orders-nav/orders-nav.component';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { OrderPropertyComponent } from './order-property/order-property.component';
+import { IngredientsPageComponent } from './ingredients-page/ingredients-page.component';
+import { CollapseModule } from 'ngx-bootstrap/collapse';
+import { IngredientsUsedComponent } from './ingredients-used/ingredients-used.component';
 
 
 
@@ -34,6 +41,10 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
     OrderCreateComponent,
     OrderUpdateComponent,
     MainCalenderComponent,
+    OrdersNavComponent,
+    OrderPropertyComponent,
+    IngredientsPageComponent,
+    IngredientsUsedComponent,
   ],
   imports: [
     BrowserAnimationsModule,
@@ -45,6 +56,14 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
     ProgressbarModule.forRoot(),
     AlertModule.forRoot(),
     BsDatepickerModule.forRoot(),
+    ModalModule.forRoot(),
+    CollapseModule.forRoot(),
+    ToastrModule.forRoot(
+      {
+        positionClass: "toast-bottom-right",
+        timeOut: 5000,
+        progressBar: true,
+      })
   ],
   providers: [],
   bootstrap: [AppComponent]

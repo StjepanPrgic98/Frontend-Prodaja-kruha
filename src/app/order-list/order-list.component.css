@@ -24,18 +24,46 @@
   font-weight: bold;
   font-size: 20px;
 }
-.custom-button {
+.custom-button-order {
   width: 100%; /* Make the button wider */
   margin-bottom: 30px;
   font-weight: bold;
   font-size: 20px;
-  text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;
+  text-shadow: -1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white, 1px 1px 0 white;
   
 }
+.custom-button {
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px 20px;
+}
+.modal-button
+{
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px 20px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+.modal-text
+{
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.custom-button i {
+  margin-right: 5px;
+}
+
 .custom-button:hover {
   text-shadow: -1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white, 1px 1px 0 white;
 }
-
+.custom-button.delete-button:hover {
+  text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;
+}
+.custom-button.regular-button:hover {
+  text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;
+}
 
 
 .customer-name {
@@ -55,6 +83,26 @@
   border-radius: 10px; /* Make the edges round */
   background-color: transparent; /* Remove the background color */
 }
+.red-background {
+  border: 6px solid #ffdd00c5; /* Increase the border thickness */
+  border-radius: 10px; /* Make the edges round */
+  background-color: transparent; /* Remove the background color */
+}
+.gradient-border {
+  border: 6px solid;
+  border-image-slice: 1;
+  border-width: 6px;
+  border-image-source: linear-gradient(to right, rgb(5, 219, 5), #ffdd00);
+  border-radius: 10px;
+  background-color: transparent;
+}
+.gray-background {
+  border: 6px solid #1b181dc5; /* Increase the border thickness */
+  border-radius: 10px; /* Make the edges round */
+  background-color: transparent; /* Remove the background color */
+}
+
+
 
 .accordion-group {
   margin-bottom: 5px;
@@ -131,7 +179,12 @@ td {
 }
 .targetDayButton {
   margin-right: 5px; /* Adjust the margin as desired */
-  font-size: 19px;
+  font-size: 20px;
+}
+.targetDayButton-red {
+  margin-right: 5px; /* Adjust the margin as desired */
+  font-size: 20px;
+
 }
 .dayTitle
 {
@@ -141,4 +194,61 @@ td {
   margin-bottom: 50px;
   color: #ffdd00;
   text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;
+}
+.dayTitle-regular
+{
+  font-size: 30px;
+  font-weight: bold;
+  text-align: center;
+  color: #ffdd00;
+  text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;
+}
+.day-title-modal
+{
+  font-size: 35px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 50px;
+  color: #ffdd00;
+  text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;
+}
+.order-details-heading {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.order-details p {
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.order-items-heading {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.order-items table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.order-items th,
+.order-items td {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.order-items th {
+  font-weight: bold;
+  text-align: left;
+  background-color: #f2f2f2;
+}
+
+.order-items tr:last-child td {
+  border-bottom: none;
 }

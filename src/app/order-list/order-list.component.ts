@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { OrderService } from '../_services/order.service';
 import { TotalAmmountComponent } from '../total-ammount/total-ammount.component';
 import { AlertComponent } from 'ngx-bootstrap/alert';
@@ -6,6 +6,8 @@ import { timeout } from 'rxjs';
 import { SharedService } from '../_services/shared.service';
 import { Order } from '../_models/order';
 import { Route, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-order-list',
@@ -25,16 +27,26 @@ export class OrderListComponent {
   completedOrder: boolean = false;
   dateOfOrders: string = "";
   orderDay: string = "";
+  noOrders: boolean = false;
+
+  regularOrders: any;
+  day: string = "";
 
 
-  constructor(private orderService: OrderService, private sharedService: SharedService, private router: Router) {}
+  constructor(private orderService: OrderService,
+     private sharedService: SharedService, 
+     private router: Router, 
+     private toastr: ToastrService,
+     private modalService: BsModalService
+     ) {}
 
   ngOnInit() {
     this.dateOfOrders = this.orderService.GetOrderDate()
     this.orderDay = this.orderService.GetOrderDay();
     this.newOrder = this.orderService.CheckForNewOrder();
+    if(this.newOrder){this.toastr.success("Uspjesno! Nova narudzba dodana!")}
     this.targetDayChosen = this.defaultDay;
-    this.GetOrdersForTargetDate();
+    this.GetOrdersForTargetDate(true);
     this.orderService.RemoveNewOrder();
   }
 
@@ -50,17 +62,44 @@ export class OrderListComponent {
         this.orders = response;
       },
       (error: any) => {
-        console.log(error);
+        this.noOrders = true;
       }
     );
   }
-  GetOrdersForTargetDate()
+  GetOrdersForTargetDate(resetAll: boolean)
   {
     if(this.orderService.GetOrderDate() == ""){this.router.navigateByUrl("/")}
     this.orderService.GetOrdersForTargetDate(this.orderService.GetOrderDate()).subscribe(
       {
-        next: response => {this.orders = response, this.dateOfOrders = this.orderService.GetOrderDate()},
-        error: error => console.log(error)
+        next: response => 
+        {
+          if(this.orders == undefined || resetAll == true)
+          {
+            this.orders = response, this.dateOfOrders = this.orderService.GetOrderDate(), console.log(response)
+          }
+          else
+          {
+            this.orders = this.orders.concat(response), this.dateOfOrders = this.orderService.GetOrderDate(), console.log(response)
+          }
+        },
+        error: error => this.toastr.warning("Ovaj datum trenutno nema narudzbi!", "Dobro dosli!", {positionClass: "toast-top-center"})
+      })
+  }
+
+  GetListOfRegularOrdersWithOption()
+  {
+
+    this.orderService.GetListOfRegularOrdersWithOptions().subscribe(
+      {
+        next: response => {
+          if (this.orders === undefined) {
+            this.orders = response; 
+          } else {
+            this.orders = this.orders.concat(response); 
+          }
+          this.toastr.success("Redovne narudzbe dodane!", "Uspjesno!");
+        },
+        error: error => this.toastr.error("Redovne narudzbe nisu dohvacene!", "Upozorenje!")
       })
   }
 
@@ -81,23 +120,33 @@ export class OrderListComponent {
   DeleteOrder(id: number) {
     this.orderService.DeleteOrder(id).subscribe({
       next: () => {
-        this.GetOrdersForTargetDate();
-        
+        this.GetOrdersForTargetDate(true);
+        this.toastr.error("Narudzba je uspjesno obrisana!")
       },
-      error: error => console.log(error)
+      error: error => this.toastr.error("Upozorenje! Narudzba nije uspjesno obrisana!")
     });
-    this.deletedOrder = true;
-    this.ScrollToTop();
+    //this.deletedOrder = true;
+    //this.ScrollToTop();
   }
-  CompleteOrder(id: number)
+  CompleteOrder(event: Event, id: number)
   {
+    event.stopPropagation();
     this.orderService.CompleteOrder(id).subscribe(
       {
-        next: () => this.GetOrdersForTargetDate(),
-        error: error => console.log(error)
+        next: () => {this.GetOrdersForTargetDate(true), this.toastr.success("Narudžba zavrsena!", "Uspješno")},
+        error: error => this.toastr.error("Narudzba nije uspjesno zavrsena!", "Upozorenje")
       });
-    this.completedOrder = true;
-    this.ScrollToTop();
+    //this.completedOrder = true;
+    //this.ScrollToTop();
+  }
+
+  MarkAsNotSold(id: number)
+  {
+    this.orderService.MarkAsNotSold(id).subscribe(
+      {
+        next: () => {this.GetOrdersForTargetDate(true), this.toastr.warning("Narudžba je označena kao ne prodana!", "Pažnja")},
+        error: error => this.toastr.error("Nije uspjelo!", "Upozorenje!")
+      });
   }
   
   UpdateOrder(id: number)
@@ -105,6 +154,17 @@ export class OrderListComponent {
     this.sharedService.SetOrderId(id);
     this.router.navigateByUrl("/orders/update/" + id);
   }
+
+  SetOrderProperty(orderId: number, property: string)
+  {
+    this.orderService.SetOrderProperty(orderId, property).subscribe(
+      {
+        next: response => {this.GetOrdersForTargetDate(true), this.toastr.success("Nova regularna narudzba dodana!", "Uspjesno!")},
+        error: error => this.toastr.error("Narudzba nije postavljena kao regularna!", "Upozorenje!")
+      })
+  }
+
+  
 
   CalculateOrders()
   {
@@ -173,6 +233,24 @@ export class OrderListComponent {
 
   ScrollToTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  modalRef?: BsModalRef;
+  message?: string;
+
+ 
+  openModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template, {class: 'modal-sm'});
+  }
+ 
+  confirm(): void {
+    this.message = 'Confirmed!';
+    this.modalRef?.hide();
+  }
+ 
+  decline(): void {
+    this.message = 'Declined!';
+    this.modalRef?.hide();
   }
   
 }

@@ -1,0 +1,137 @@
+<div class="container" style="margin-top: 100px;">
+  <div class="col-md-12 dayTitle">Redovne narudzbe</div>
+  <div class="row">
+    <div class="col-md-4">
+      <button type="button" class="btn btn-outline-warning btn-lg btn-block custom-button-order" [ngClass]="{'active': property === 'TuesdayRegular'}" (click)="SetPropertyValue('TuesdayRegular', 'Utorak')" >Redovne za Utorak</button>
+    </div>
+    <div class="col-md-4">
+      <button type="button" class="btn btn-outline-warning btn-lg btn-block custom-button-order" [ngClass]="{'active': property === 'FridayRegular'}" (click)="SetPropertyValue('FridayRegular', 'Petak')" >Redovne za Petak</button>
+    </div>
+    <div class="col-md-4">
+      <button type="button" class="btn btn-outline-warning btn-lg btn-block custom-button-order" [ngClass]="{'active': property === 'Regular'}" (click)="SetPropertyValue('Regular', 'Utorak|Petak')" >Redovne za Utorak i Petak</button>
+    </div>
+  </div>
+  <div class="row" style="margin-left: 50px;">
+    <div class="col-md-4 descript">Ime kupca</div>
+    <div class="col-md-4 descript">Kruh / Količina</div>
+    <div class="col-md-1 descript"></div>
+    <div class="col-md-2 descript">Cijena</div>
+  </div>
+  <accordion [isAnimated]="true">
+    <ng-container *ngFor="let order of orders">
+    <accordion-group class="accordion-group customMargin" [ngClass]="{
+      'green-background': order.completed && !(order.property === 'Regular' || order.property === 'TuesdayRegular' || order.property === 'FridayRegular'),
+      'red-background': !order.completed && (order.property === 'Regular' || order.property === 'TuesdayRegular' || order.property === 'FridayRegular'),
+      'gradient-border': order.completed && (order.property === 'Regular' || order.property === 'TuesdayRegular' || order.property === 'FridayRegular')
+    }" *ngIf="order.property === property">
+      <div class="accordion-heading" accordion-heading [ngClass]="{'green-background': order.completed == true}">
+        <div class="customer-name">{{ order.customerName }}</div>
+        <div class="product-details">
+          <ng-container *ngFor="let item of order.orderItems; let last = last">
+            {{ item.productType }} / {{ item.quantity }} <strong style="color: #ffbf01; text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;">{{ !last ? ' | ' : '' }}</strong>
+          </ng-container>
+        </div>
+        <div class="total-price" *ngIf="order.totalPrice !== undefined">
+          <span style="margin-right: 70px;">${{ order.totalPrice }}</span>
+        </div>
+        <div class="total-price">
+          <span style="margin-right: 30px;">{{regularDayText}}</span>
+        </div>
+      </div>
+      <div class="accordion-content" [ngClass]="{'green-text': order.completed}">
+        <ng-template #template>
+          <div class="modal-body text-center">
+            <p class="modal-text">Obrisati narudzbu?</p>
+            <button type="button" class="btn btn-danger modal-button"  (click)="confirm(); DeleteOrder(order.orderId)" >Da</button>
+            <button type="button" class="btn btn-primary modal-button" (click)="decline()" >Ne</button>
+          </div>
+        </ng-template>
+        <h4 class="order-details-heading">Detalji narudzbe</h4>
+        <div class="order-details">
+          <p><strong>Kupac:</strong> {{ order.customerName }}</p>
+        </div>
+
+        <h4 class="order-items-heading">Stavke narudzbe:</h4>
+        <div class="order-items">
+          <table class="table">
+            <thead>
+              <tr>
+                <th class="text-center">Proizvod</th>
+                <th class="text-center">Kolicina</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of order.orderItems">
+                <td>{{ item.productType }}</td>
+                <td>{{ item.quantity }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        
+
+        
+        <div class="row" style="margin-top: 7px;">
+          <div class="col-md-4 d-flex justify-content-center">
+            <button type="button" class="btn btn-warning custom-button " (click)="lgModal.show()">
+              <i class="fa fa-check"></i> Postavi kao redovnu
+            </button>
+          </div>
+          <div class="col-md-4 d-flex justify-content-center">
+            <button type="button" class="btn btn-dark custom-button regular-button" (click)="UpdateOrder(order.orderId)">
+              <i class="fa fa-history"></i> Promjeni stavke narudzbe
+            </button>
+          </div>
+          <div class="col-md-4 d-flex justify-content-center">
+            <button type="button" class="btn btn-danger custom-button delete-button" (click)="openModal(template); ">
+              <i class="fa fa-exclamation-triangle"></i> Obriši narudžbu
+            </button>
+          </div>
+          
+        </div>
+        
+        
+        
+      </div>
+      <div bsModal #lgModal="bs-modal" class="modal fade" tabindex="-1"
+     role="dialog" aria-labelledby="dialog-sizes-name1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 id="dialog-sizes-name1" class="modal-title day-title-modal">Izaberite dane za koji ce narudzba biti redovna</h4>
+        <button type="button" class="btn-close close pull-right" (click)="lgModal.hide()" aria-label="Close">
+          <span aria-hidden="true" class="visually-hidden">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="col-md-12 text-center"><strong>Izaberite jednu od ponudjenih opcija</strong></div>
+        <div class="row" style="margin-top: 7px;">
+          
+          <div class="col-md-4 d-flex justify-content-center">
+            <button type="button" class="btn btn-dark custom-button regular-button" (click)="SetOrderProperty(order?.orderId, 'TuesdayRegular'); lgModal.hide()">
+              <i class="fa fa-history"></i> Utorak
+            </button>
+          </div>
+          <div class="col-md-4 d-flex justify-content-center">
+            <button type="button" class="btn btn-dark custom-button regular-button" (click)="SetOrderProperty(order?.orderId, 'FridayRegular'); lgModal.hide()">
+              <i class="fa fa-history"></i> Petak
+            </button>
+          </div>
+          <div class="col-md-4 d-flex justify-content-center">
+            <button type="button" class="btn btn-dark custom-button regular-button" (click)="SetOrderProperty(order?.orderId, 'Regular'); lgModal.hide()">
+              <i class="fa fa-history"></i> Utorak i Petak
+            </button>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    </accordion-group>
+  </ng-container>
+    
+  </accordion>
+        
+</div>

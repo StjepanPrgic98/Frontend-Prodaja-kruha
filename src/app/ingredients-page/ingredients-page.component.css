@@ -1,0 +1,74 @@
+.custom-button-order {
+  width: 100%;
+  margin-bottom: 30px;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.table {
+  font-family: "Arial", sans-serif;
+}
+.dayTitle
+{
+  font-size: 50px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 50px;
+  color: #ffdd00;
+  text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;
+}
+
+.table thead th {
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.table tbody td {
+  font-size: 25px;
+  text-align: center;
+}
+
+.custom-button {
+  font-size: 14px;
+  font-weight: bold;
+  padding: 5px 10px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.custom-button i {
+  margin-right: 5px;
+}
+.modal-button
+{
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px 20px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.custom-button:hover {
+  text-shadow: -1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white, 1px 1px 0 white;
+}
+
+.custom-button.delete-button:hover {
+  text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;
+}
+
+.custom-button.regular-button:hover {
+  text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;
+}
+
+.left-align {
+  text-align: left;
+}
+.table thead th.left-align,
+.table tbody td.left-align {
+  text-align: left;
+}
+
+.table tbody td:not(.left-align) {
+  text-align: center;
+}

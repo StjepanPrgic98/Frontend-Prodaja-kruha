@@ -15,6 +15,10 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     width: 300px; /* Adjust the width as desired */
   }
+  .targetDayButton {
+    margin-right: 5px; /* Adjust the margin as desired */
+    font-size: 21px;
+  }
   
   .product-info {
     font-size: 24px;
@@ -33,5 +37,18 @@
   .total-price {
     font-size: 20px;
     margin-top: 10px;
+  }
+  .targetDayButton {
+    margin-right: 5px; /* Adjust the margin as desired */
+    font-size: 21px;
+  }
+  .dayTitle
+  {
+    font-size: 50px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 50px;
+    color: #ffdd00;
+    text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;
   }
   

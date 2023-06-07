@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertComponent } from 'ngx-bootstrap/alert';
 import { OrderItem } from '../_models/OrderItem';
@@ -6,6 +6,9 @@ import { Order } from '../_models/order';
 import { OrderService } from '../_services/order.service';
 import { ProductService } from '../_services/product.service';
 import { SharedService } from '../_services/shared.service';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { Location } from '@angular/common';
+
 
 @Component({
   selector: 'app-order-update',
@@ -38,9 +41,15 @@ export class OrderUpdateComponent {
 
   
 
-  constructor(private productService: ProductService, private orderService: OrderService, private router: Router, private sharedService: SharedService){}
+  constructor(private productService: ProductService,
+     private orderService: OrderService, private router: Router, 
+     private sharedService: SharedService,
+     private modalService: BsModalService,
+     private location: Location     
+     ){}
   ngOnInit()
   {
+    if(this.orderService.GetOrderDate() == "" && this.sharedService.GetOrderId() == 0){this.router.navigateByUrl("/"); return;}
     this.GetProducts(); 
     this.SetCroatianDay();
   }
@@ -74,8 +83,6 @@ export class OrderUpdateComponent {
         {
           this.numberOfOrderedProduct[j] = this.orderToUpdate.orderItems[i].quantity
           this.timesAdded += this.orderToUpdate.orderItems[i].quantity
-          console.log(this.productTypes);
-          console.log(this.numberOfOrderedProduct);
         }
       }
       
@@ -114,18 +121,25 @@ export class OrderUpdateComponent {
   {
     this.orderService.UpdateOrder(order, id).subscribe(
       {
-        next: () => this.router.navigateByUrl("/orders"),
+        next: () => this.goBack(),
         error: error => console.log(error)
       })
   }
 
   GetProducts()
   {
+    if(this.sharedService.GetProducts() != null){this.products = this.sharedService.GetProducts(); this.GetOrder(); return;}
     this.productService.GetProducts().subscribe(
       {
-        next: response => {this.products = response, this.GetOrder()},
+        next: response => {this.products = response, this.GetOrder(), this.sharedService.SetProducts(response)},
         error: error => console.log(error)
       })
+  }
+
+  GoToOrderProperty()
+  {
+    this.router.navigateByUrl("/orders/property");
+    return;
   }
 
 
@@ -168,6 +182,7 @@ export class OrderUpdateComponent {
     this.targetDayChosen = targetDay;
   }
 
+
   SortArrays()
   {
     for (let i = 0; i < 5; i++)
@@ -203,6 +218,10 @@ export class OrderUpdateComponent {
       this.targetDayChosen = "Tuesday"
     }
   }
+  goBack() {
+    this.location.back();
+  }
+  
 
   alerts: any[] = [{
     type: 'success',
@@ -268,6 +287,23 @@ export class OrderUpdateComponent {
       this.abortOrder = false;
   }
 
+  modalRef?: BsModalRef;
+  message?: string;
+
+ 
+  openModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template, {class: 'modal-sm'});
+  }
+ 
+  confirm(): void {
+    this.message = 'Confirmed!';
+    this.modalRef?.hide();
+  }
+ 
+  decline(): void {
+    this.message = 'Declined!';
+    this.modalRef?.hide();
+  }
   
 
 }

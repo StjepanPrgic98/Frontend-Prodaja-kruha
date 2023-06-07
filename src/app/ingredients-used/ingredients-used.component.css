@@ -1,0 +1,76 @@
+.custom-button i {
+    margin-right: 5px;
+  }
+  
+  .custom-button:hover {
+    text-shadow: -1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white, 1px 1px 0 white;
+  }
+  .custom-button.delete-button:hover {
+    text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;
+  }
+  .custom-button.regular-button:hover {
+    text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;
+  }
+
+  
+  .dayTitle
+  {
+    font-size: 50px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 50px;
+    color: #ffdd00;
+    text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;
+  }
+  .custom-button-order {
+    width: 100%; /* Make the button wider */
+    margin-bottom: 30px;
+    font-weight: bold;
+    font-size: 20px;
+    text-shadow: -1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white, 1px 1px 0 white;  
+  }
+  .custom-button-order-dark {
+    width: 100%; /* Make the button wider */
+    margin-bottom: 30px;
+    font-weight: bold;
+    font-size: 20px;
+    text-shadow: -1px -1px 0 rgb(0, 0, 0), 1px -1px 0 rgb(0, 0, 0), -1px 1px 0 rgb(0, 0, 0), 1pxrgb(0, 0, 0)0 white;  
+  }
+  .custom-button {
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 20px;
+  }
+  .custom-card {
+    width: 15rem;
+    margin-left: 30px;
+    /* Add any other custom styles you want for the card */
+  }
+  
+  .custom-card-title {
+    font-size: 20px;
+    font-weight: bold;
+    /* Add any other custom styles you want for the card title */
+  }
+  
+  .custom-card-text {
+    font-size: 20px;
+    /* Add any other custom styles you want for the card text */
+  }
+  .table-row-incomplete {
+    background-color: rgba(255, 0, 0, 0.2); /* Red background color with low opacity */
+  }
+  
+  .modal-button
+{
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px 20px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+.modal-text
+{
+  font-size: 25px;
+  font-weight: bold;
+}

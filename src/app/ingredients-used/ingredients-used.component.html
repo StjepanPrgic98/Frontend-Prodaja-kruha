@@ -1,0 +1,106 @@
+<div class="container" style="margin-top: 100px;">
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+        </div>
+        <div class="col-md-2"></div>
+        <div class="col-md-2">
+          <button type="button" class="btn btn-outline-warning btn-lg btn-block custom-button-order" routerLink="/ingredients/list">
+            <strong>Sastojci</strong> <i class="fa fa-angle-double-right" style="margin-left: 3px;"></i>
+          </button>
+        </div>
+      </div>
+    <div class="row" >
+      <div class="col-md-3" *ngFor="let product of products">
+        <button type="button" class="btn btn-outline-dark btn-lg btn-block custom-button-order-dark" (click)="SetProductType(product.type)" [ngClass]="{ 'active': product.type === productType}">{{product.type}}</button>
+      </div>
+      
+    </div>
+    <div class="row" style="margin-top: 20px;">
+        <div class="col-md-2"></div>
+        <div class="col-md-3">
+          <div class="d-flex justify-content-center">
+            <ng-container *ngFor="let product of products">
+              <div class="card custom-card" *ngIf="product.type === productType">
+                <img class="card-img-top" src="{{product.photoURL}}" alt="Card image cap">
+                <div class="card-body">
+                  <p class="card-text custom-card-text"><strong>Naziv:</strong> {{product.type}}</p>
+                  <p class="card-text custom-card-text"><strong>Tezina:</strong> {{product.weight}}g</p>
+                  <p class="card-text custom-card-text"><strong>Prodajna cijena:</strong> {{product.price}} KM</p>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+        <div class="col-md-6">
+
+          <button type="button" class="btn btn-outline-warning btn-lg btn-block custom-button-order" (click)="CreateNewIngredientsUsedList()">
+            <strong>Spremi smjesu</strong> <i class="fa fa-check-square-o" style="margin-left: 3px;"></i>
+          </button>
+
+          <table class="table table-hover table-condensed">
+            <thead>
+              <tr>
+                <th>Naziv sastojka</th>
+                <th>Postotak %</th>
+                <th>Akcije</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let ingredient of ingredientInfos; let i = index" [style.background-color]="(ingredient.IngredientType === '' || ingredient.IngredientPercentage === 0) ? 'rgba(255, 0, 0, 0.2)' : 'transparent'">
+                <td>
+                  <select class="form-control" [(ngModel)]="ingredient.IngredientType">
+                    <option *ngFor="let ing of ingredients" [value]="ing.ingredientType">{{ ing.ingredientType }}</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="number" class="form-control" [(ngModel)]="ingredient.IngredientPercentage">
+                </td>
+                <td>
+                  <button type="button" class="btn btn-primary btn-sm" (click)="openModal(templateUpdate)">Uredi</button>
+                  <button type="button" class="btn btn-danger btn-sm" (click)="openModal(template)">Obriši</button>
+                  <ng-template #template>
+                    <div class="modal-body text-center">
+                      <p class="modal-text">Obrisati sastojak iz smjese?</p>
+                      <button type="button" class="btn btn-danger modal-button"  (click)="confirm(); deleteIngredient(i)" >Da</button>
+                      <button type="button" class="btn btn-primary modal-button" (click)="decline()" >Ne</button>
+                    </div>
+                  </ng-template>
+                  <ng-template #templateUpdate>
+                    <div class="modal-body text-center">
+                      <p class="modal-text">Promjenuti stavke smjese?</p>
+                      <button type="button" class="btn btn-danger modal-button"  (click)="confirm(); editIngredient(-1)" >Da</button>
+                      <button type="button" class="btn btn-primary modal-button" (click)="decline()" >Ne</button>
+                    </div>
+                  </ng-template>
+                </td>
+              </tr>
+              <tr [style.background-color]="(newIngredientInfo.IngredientType === '' || newIngredientInfo.IngredientPercentage === 0) ? 'rgba(255, 0, 0, 0.2)' : 'transparent'">
+                <td>
+                  <select class="form-control" [(ngModel)]="newIngredientInfo.IngredientType">
+                    <option *ngFor="let ing of ingredients" [value]="ing.ingredientType">{{ ing.ingredientType }}</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="number" class="form-control" [(ngModel)]="newIngredientInfo.IngredientPercentage">
+                </td>
+                <td>
+                  <button type="button" class="btn btn-success btn-sm" (click)="addNewIngredient()">Dodaj</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          
+          
+          
+          
+          
+          
+          
+              
+              
+        </div>
+      </div>
+      
+      
+</div>

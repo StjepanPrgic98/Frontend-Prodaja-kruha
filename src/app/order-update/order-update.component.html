@@ -1,17 +1,9 @@
 
 <div class="container" style="margin-top: 100px;">
-    <div class="col-md-12" *ngIf="isCustomerNameNull">    
-      <alert class="alertText" [type]="customerNameNull.type" [dismissOnTimeout]="customerNameNull.timeout" (onClosed)="onClosed(customerNameNull)">{{ customerNameNull.msg }}</alert>
-    </div>
-    <div class="col-md-12" *ngIf="areProductItemsNull">    
-      <alert class="alertText" [type]="productsNull.type" [dismissOnTimeout]="productsNull.timeout" (onClosed)="onClosed(productsNull)">{{ productsNull.msg }}</alert>
-    </div>
-    <div class="col-md-12" *ngIf="isTargetDayNull">    
-      <alert class="alertText" [type]="targetDayNull.type" [dismissOnTimeout]="targetDayNull.timeout" (onClosed)="onClosed(targetDayNull)">{{ targetDayNull.msg }}</alert>
-    </div>
     <form #createOrderForm="ngForm" (ngSubmit)="UpdateOrder(orderToUpdate.orderId)">
       <div class="row">
-        <div class="col-md-4"></div>
+        <div class="col-md-4">
+        </div>
         <div class="col-md-4">
           <div class="form-group text-center">
             <label for="exampleInputEmail1" class="customLabel">Ime kupca</label>
@@ -19,7 +11,8 @@
             >
           </div>
         </div>
-        <div class="col-md-4"></div>
+        <div class="col-md-4">
+        </div>
       </div>
       <div class="row" style="margin-top: 20px;">
         <div class="col-md-12">

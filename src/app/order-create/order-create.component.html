@@ -1,13 +1,4 @@
-<div class="container" style="margin-top: 100px;">
-  <div class="col-md-12" *ngIf="isCustomerNameNull">    
-    <alert class="alertText" [type]="customerNameNull.type" [dismissOnTimeout]="customerNameNull.timeout" (onClosed)="onClosed(customerNameNull)">{{ customerNameNull.msg }}</alert>
-  </div>
-  <div class="col-md-12" *ngIf="areProductItemsNull">    
-    <alert class="alertText" [type]="productsNull.type" [dismissOnTimeout]="productsNull.timeout" (onClosed)="onClosed(productsNull)">{{ productsNull.msg }}</alert>
-  </div>
-  <div class="col-md-12" *ngIf="isTargetDayNull">    
-    <alert class="alertText" [type]="targetDayNull.type" [dismissOnTimeout]="targetDayNull.timeout" (onClosed)="onClosed(targetDayNull)">{{ targetDayNull.msg }}</alert>
-  </div>
+<div class="container" style="margin-top: 70px;">
   <form #createOrderForm="ngForm" (ngSubmit)="CreateOrder()">
     <div class="row">
       <div class="col-md-4"></div>
