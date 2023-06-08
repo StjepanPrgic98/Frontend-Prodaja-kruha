@@ -23,6 +23,8 @@ export class IngredientsUsedComponent {
   newIngredientInfo: IngredientInfo = { IngredientType: '', IngredientPercentage: 0 };
   ingredientsUsed: IngredientsUsed = {ProductType: "", IngredientTypes: []}
 
+  editing: boolean = false;
+
   constructor(private orderService: OrderService, private ingredientService: IngredientService, private router: Router,
     private toastr: ToastrService, private productService: ProductService,
     private modalService: BsModalService
@@ -51,6 +53,7 @@ export class IngredientsUsedComponent {
         error: () => this.toastr.error("Nije uspjelo dohvacanje sastojaka!", "Upozorenje!")   
       })
   }
+
 
   SetProductType(type: string)
   {
@@ -115,6 +118,11 @@ export class IngredientsUsedComponent {
         next: response => {console.log(response), this.toastr.success("Smjesa dodana!", "Uspjesno!")},
         error: () => this.toastr.error("Dodavanje smjese nije uspjelo!", "Upozorenje!")
       })
+  }
+
+  SetEditing()
+  {
+    this.editing = !this.editing;
   }
 
   modalRef?: BsModalRef;

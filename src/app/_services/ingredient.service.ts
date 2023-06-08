@@ -37,4 +37,19 @@ export class IngredientService {
   {
     return this.http.post(this.baseUrl + "ingredients/linkIngredientsToProduct", ingredientsUsed);
   }
+
+  public GetProductsWithTheirIngredients(): Observable<any>
+  {
+    return this.http.get(this.baseUrl + "ingredients/productsWithIngredients")
+  }
+
+  public GetProductsWithIngredientsAndPrices(): Observable<any>
+  {
+    return this.http.get(this.baseUrl + "ingredients/allProductsAndPrices")
+  }
+
+  public GetTotalAmmountOfIngredientsForTargetDate(date: string):Observable<any>
+  {
+    return this.http.get(this.baseUrl + "ingredients/totalProductsAndIngredients/" + date)
+  }
 }

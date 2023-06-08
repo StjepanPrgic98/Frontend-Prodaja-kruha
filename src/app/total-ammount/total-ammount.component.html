@@ -14,14 +14,60 @@
     
     <div class="col-md-12 dayTitle">Informacije za <strong>{{orderDay}} - {{dateOfOrders}}</strong>!</div>
 </div>
-  <div class="total-amount-list">
-    <div class="total-amount-item" *ngFor="let item of totalOrders">
-      <div class="product-info">
-        <div class="product-type">{{ item.productType }}</div>
-        <div class="total-quantity">
-          Ukupna količina: <strong>{{ item.totalQuantity }}</strong>
-        </div>
-      </div>
-    </div>
+<div class="row">
+  <div class="col-md-4">
+    <table class="table table-hover ">
+      <thead class="thead-light">
+        <tr>
+          <th class="text-center custom-font">Tip proizvoda</th>
+          <th class="text-center custom-font">Ukupna količina potrebna</th>
+        </tr>
+      </thead>
+      <tbody *ngFor="let order of totalOrders">
+        <tr>
+          <td class="text-center custom-font">{{ order.productType }}</td>
+          <td class="text-center custom-font">{{ order.totalQuantity }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table table-hover " style="margin-top: 43px;">
+      <thead class="thead-light">
+        <tr>
+          <th class="text-center custom-font">Ukupno</th>
+          <th class="text-center custom-font">Potrebno</th>
+          <th class="text-center custom-font">Profit</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="text-center custom-font">{{ totalMoneyGained }} KM</td>
+          <td class="text-center custom-font">{{ totalPrice }} KM</td>
+          <td class="text-center custom-font">{{ totalProfit }} KM</td>
+        </tr>
+      </tbody>
+    </table>
+    
   </div>
+  <div class="col-md-8">
+    <table class="table table-hover ">
+      <thead class="thead-light">
+        <tr>
+          <th class="text-center custom-font">Sastojak</th>
+          <th class="text-center custom-font">Ukupna količina sastojaka potrebna</th>
+          <th class="text-center custom-font">Ukupna cijena sastojaka</th>
+        </tr>
+      </thead>
+      <tbody *ngFor="let ingredient of totalIngredients">
+        <tr>
+          <td class="text-center custom-font">{{ ingredient.ingredientType }}</td>
+          <td *ngIf="ingredient.ingredientType !== 'Voda'" class="text-center custom-font">{{ ingredient.totalIngredientWeight }} g</td>
+          <td *ngIf="ingredient.ingredientType === 'Voda'" class="text-center custom-font">{{ ingredient.totalIngredientWeight }} ml</td>
+          <td class="text-center custom-font">{{ ingredient.totalIngredientPrice }} KM</td>
+        </tr>
+      </tbody>
+    </table>
+    
+    
+  </div>
+</div>
 </div>

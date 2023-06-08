@@ -45,6 +45,7 @@ export class IngredientsPageComponent {
   Calculate1kgPrice(price: number, weight: number)
   {
     const pricePerKg = (price / weight) * 1000;
+    if(!pricePerKg){return 0}
     return pricePerKg.toFixed(2);
   }
 

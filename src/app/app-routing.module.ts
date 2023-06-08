@@ -10,6 +10,7 @@ import { TotalAmmountComponent } from './total-ammount/total-ammount.component';
 import { OrderPropertyComponent } from './order-property/order-property.component';
 import { IngredientsPageComponent } from './ingredients-page/ingredients-page.component';
 import { IngredientsUsedComponent } from './ingredients-used/ingredients-used.component';
+import { ProductsListComponent } from './products-list/products-list.component';
 
 const routes: Routes = 
 [
@@ -22,6 +23,7 @@ const routes: Routes =
   {path: "ingredients/list", component: IngredientsPageComponent},
   {path: "ingredients/ingredientsUsed", component: IngredientsUsedComponent},
   {path: "stats", component: StatsComponent},
+  {path: "products/list", component: ProductsListComponent},
   {path: "**", component: OrdersPageComponent, pathMatch: "full"},
 ];
 

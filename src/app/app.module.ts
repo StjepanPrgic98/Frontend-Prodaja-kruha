@@ -27,6 +27,7 @@ import { OrderPropertyComponent } from './order-property/order-property.componen
 import { IngredientsPageComponent } from './ingredients-page/ingredients-page.component';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { IngredientsUsedComponent } from './ingredients-used/ingredients-used.component';
+import { ProductsListComponent } from './products-list/products-list.component';
 
 
 
@@ -45,6 +46,7 @@ import { IngredientsUsedComponent } from './ingredients-used/ingredients-used.co
     OrderPropertyComponent,
     IngredientsPageComponent,
     IngredientsUsedComponent,
+    ProductsListComponent,
   ],
   imports: [
     BrowserAnimationsModule,

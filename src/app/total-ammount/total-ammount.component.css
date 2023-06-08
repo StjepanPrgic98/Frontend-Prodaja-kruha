@@ -51,4 +51,8 @@
     color: #ffdd00;
     text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;
   }
+  .custom-font
+  {
+    font-size: 17px;
+  }
   
